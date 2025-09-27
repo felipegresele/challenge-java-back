@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Manutenções</title>
+    <style>
+        body { font-family: Arial; background: #121212; color: #fff; margin: 0; padding: 20px; }
+        h2 { color: #00ff7f; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #00ff7f; padding: 10px; text-align: left; }
+        th { background-color: #00ff7f; color: #000; }
+        a { color: #00ff7f; text-decoration: none; margin-right: 10px; font-weight: bold; }
+        a:hover { color: #00cc66; }
+        .mensagem { margin: 15px 0; font-weight: bold; color: #00ff7f; }
+        .btn-adicionar { display: inline-block; margin-top: 15px; padding: 8px 16px; background: #00ff7f; color: #000; font-weight: bold; text-decoration: none; border-radius: 5px; }
+        .btn-adicionar:hover { background: #00cc66; }
+        .btn-voltar {
+            background-color: #00ff7f;
+            padding: 5px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<a th:href="@{/dashboard}" class="btn-voltar">Voltar ao dashboard</a>
+<h2>Lista de Manutenções</h2>
+
+<p th:if="${mensagem}" th:text="${mensagem}" class="mensagem"></p>
+
+<table th:if="${manutencoes}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Descrição</th>
+        <th>Prioridade</th>
+        <th>Em Andamento</th>
+        <th>Placa Moto</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${manutencoes}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.descricao}"></td>
+        <td th:text="${m.prioridadeManutencao}"></td>
+        <td th:text="${m.emAndamento ? 'Sim' : 'Não'}"></td>
+        <td th:text="${m.placaMoto}"></td>
+        <td>
+            <a th:href="@{'/manutencoes-view/editar/' + ${m.id}}">Editar</a>
+            <a th:href="@{'/manutencoes-view/excluir/' + ${m.id}}">Excluir</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/manutencoes-view/adicionar}" class="btn-adicionar">Adicionar Nova Manutenção</a>
+</body>
+</html>

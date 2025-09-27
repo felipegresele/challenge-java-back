@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Galpão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 { color: #00ff7f; }
+        form { margin-top: 20px; max-width: 400px; }
+        label { display: block; margin: 10px 0 5px; }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #00ff7f;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover { background: #00cc66; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        .mensagem-erro { color: #ff5555; margin-bottom: 10px; font-weight: bold; }
+        a { display: inline-block; margin-top: 15px; color: #00ff7f; text-decoration: none; font-weight: bold; }
+        a:hover { color: #00cc66; }
+    </style>
+</head>
+<body>
+<h2>Adicionar Galpão</h2>
+
+<div th:if="${mensagemErro}" class="mensagem-erro">
+    <p th:text="${mensagemErro}"></p>
+</div>
+
+<form th:action="@{/galpoes-view/adicionar}" method="post">
+    <label>Nome:</label>
+    <input type="text" name="nome" required th:disabled="${mensagemErro != null}">
+
+    <label>Endereço:</label>
+    <input type="text" name="endereco" required th:disabled="${mensagemErro != null}">
+
+    <label>Capacidade:</label>
+    <input type="number" name="capacidade" required th:disabled="${mensagemErro != null}">
+
+    <button type="submit" th:disabled="${mensagemErro != null}">Salvar</button>
+</form>
+
+<a th:href="@{/galpoes-view/todos}">Voltar para a lista</a>
+</body>
+</html>
