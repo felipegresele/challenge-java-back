@@ -1,6 +1,5 @@
 package com.mottu.mottu.controller;
 
-
 import com.mottu.mottu.model.DTO.UsuarioDTO;
 import com.mottu.mottu.model.Role;
 import com.mottu.mottu.model.Usuario;
@@ -26,20 +25,39 @@ public class UsuarioController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @GetMapping("/")
+    public String home() {
+        return "home"; // home.html
+    }
+
+    @GetMapping("/login")
+    public String loginPage(Model model) {
+        model.addAttribute("showLoginModal", true);
+        return "home";
+    }
+
+    @GetMapping("/cadastro")
+    public String cadastroPage(Model model) {
+        model.addAttribute("showCadastroModal", true);
+        return "home";
+    }
+
     @GetMapping("/usuarios/listar")
-    public ResponseEntity getAll() {
+    @ResponseBody
+    public ResponseEntity<?> getAll() {
         List<Usuario> listUsuarios = usuarioRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(listUsuarios);
     }
 
     @PostMapping("/usuarios/save")
-    @ResponseBody
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO userDTO) {
+    public String cadastrarUsuario(UsuarioDTO userDTO, Model model) {
         try {
             if (usuarioRepository.existsByEmail(userDTO.getEmail())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Erro: já existe um usuário com esse email");
+                model.addAttribute("errorMessage", "Erro: já existe um usuário com esse email");
+                model.addAttribute("showCadastroModal", true);
+                return "home";
             }
+
             Role role = roleRepository.findById(userDTO.getRoleId())
                     .orElseThrow(() -> new RuntimeException("Role não encontrada"));
 
@@ -49,30 +67,33 @@ public class UsuarioController {
             user.setPassword(userDTO.getPassword());
             user.setRole(role);
 
-            return ResponseEntity.ok(usuarioRepository.save(user));
+            usuarioRepository.save(user);
+            model.addAttribute("successMessage", "Usuário cadastrado com sucesso!");
+            return "home";
 
         } catch (Exception e) {
-            e.printStackTrace(); // vai mostrar no console o erro real
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro: " + e.getMessage());
+            model.addAttribute("errorMessage", "Erro: " + e.getMessage());
+            model.addAttribute("showCadastroModal", true);
+            return "home";
         }
     }
 
     @PostMapping("/usuarios/login")
-    @ResponseBody
-    public ResponseEntity<?> login(@RequestBody UsuarioDTO userDTO) {
+    public String login(UsuarioDTO userDTO, Model model) {
         Usuario usuario = usuarioRepository.findByEmail(userDTO.getEmail());
         if (usuario == null || !usuario.getPassword().equals(userDTO.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Usuário ou senha inválidos");
+            model.addAttribute("errorMessage", "Usuário ou senha inválidos");
+            model.addAttribute("showLoginModal", true);
+            return "home";
         }
 
-        // Retorna apenas o username para salvar no frontend
-        return ResponseEntity.ok(usuario.getUsername());
+        model.addAttribute("usuario", usuario); // passa os dados do usuário para o dashboard
+        return "dashboard"; // dashboard.html
     }
 
     @DeleteMapping("/usuarios/{id}")
-    public ResponseEntity delete(@PathVariable(value = "id") Long id) {
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
@@ -82,9 +103,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/usuarios/{id}")
-    public ResponseEntity update(@PathVariable(value = "id") Long id, @RequestBody UsuarioDTO dto) {
+    @ResponseBody
+    public ResponseEntity<?> update(@PathVariable(value = "id") Long id, @RequestBody UsuarioDTO dto) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-        //vai verificar se o registro existe
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
         }
@@ -92,6 +113,4 @@ public class UsuarioController {
         BeanUtils.copyProperties(dto, usuarioModel);
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuarioModel));
     }
-
-
 }
