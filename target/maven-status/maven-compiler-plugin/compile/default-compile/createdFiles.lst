@@ -1,3 +1,4 @@
+com\mottu\mottu\controller\thymeleaf\UsuarioThymeleafController.class
 com\mottu\mottu\model\Role.class
 com\mottu\mottu\controller\ManutencaoRestController.class
 com\mottu\mottu\model\RoleName.class

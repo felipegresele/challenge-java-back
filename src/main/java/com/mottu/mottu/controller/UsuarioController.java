@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -25,37 +25,19 @@ public class UsuarioController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @GetMapping("/")
-    public String home() {
-        return "home"; // home.html
-    }
-
-    @GetMapping("/login")
-    public String loginPage(Model model) {
-        model.addAttribute("showLoginModal", true);
-        return "home";
-    }
-
-    @GetMapping("/cadastro")
-    public String cadastroPage(Model model) {
-        model.addAttribute("showCadastroModal", true);
-        return "home";
-    }
-
-    @GetMapping("/usuarios/listar")
-    @ResponseBody
-    public ResponseEntity<?> getAll() {
+    @GetMapping("/listar")
+    public ResponseEntity<List<Usuario>> getAll() {
         List<Usuario> listUsuarios = usuarioRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(listUsuarios);
     }
 
-    @PostMapping("/usuarios/save")
-    public String cadastrarUsuario(UsuarioDTO userDTO, Model model) {
+    @PostMapping("/save")
+    @ResponseBody
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioDTO userDTO) {
         try {
             if (usuarioRepository.existsByEmail(userDTO.getEmail())) {
-                model.addAttribute("errorMessage", "Erro: já existe um usuário com esse email");
-                model.addAttribute("showCadastroModal", true);
-                return "home";
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Erro: já existe um usuário com esse email");
             }
 
             Role role = roleRepository.findById(userDTO.getRoleId())
@@ -67,33 +49,28 @@ public class UsuarioController {
             user.setPassword(userDTO.getPassword());
             user.setRole(role);
 
-            usuarioRepository.save(user);
-            model.addAttribute("successMessage", "Usuário cadastrado com sucesso!");
-            return "home";
-
+            return ResponseEntity.ok(usuarioRepository.save(user));
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Erro: " + e.getMessage());
-            model.addAttribute("showCadastroModal", true);
-            return "home";
+            e.printStackTrace(); // mostra o erro real no console
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro: " + e.getMessage());
         }
     }
 
-    @PostMapping("/usuarios/login")
-    public String login(UsuarioDTO userDTO, Model model) {
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<?> login(@RequestBody UsuarioDTO userDTO) {
         Usuario usuario = usuarioRepository.findByEmail(userDTO.getEmail());
         if (usuario == null || !usuario.getPassword().equals(userDTO.getPassword())) {
-            model.addAttribute("errorMessage", "Usuário ou senha inválidos");
-            model.addAttribute("showLoginModal", true);
-            return "home";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Usuário ou senha inválidos");
         }
-
-        model.addAttribute("usuario", usuario); // passa os dados do usuário para o dashboard
-        return "dashboard"; // dashboard.html
+        // Retorna apenas o username para salvar no frontend
+        return ResponseEntity.ok(usuario.getUsername());
     }
 
-    @DeleteMapping("/usuarios/{id}")
-    @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
@@ -102,14 +79,13 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body("Usuario deletado");
     }
 
-    @PutMapping("/usuarios/{id}")
-    @ResponseBody
-    public ResponseEntity<?> update(@PathVariable(value = "id") Long id, @RequestBody UsuarioDTO dto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
         }
-        var usuarioModel = usuario.get();
+        Usuario usuarioModel = usuario.get();
         BeanUtils.copyProperties(dto, usuarioModel);
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuarioModel));
     }
