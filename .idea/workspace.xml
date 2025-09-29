@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7960d7e-ab0a-4caa-901e-9b06823b1b98" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/controller/ManutencaoRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/controller/ManutencaoRestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/controller/thymeleaf/ManutencaoThymeleafController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/controller/thymeleaf/ManutencaoThymeleafController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/model/DTO/ManutencaoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mottu/mottu/model/DTO/ManutencaoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/mottu/mottu/controller/thymeleaf/ManutencaoThymeleafController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/mottu/mottu/controller/thymeleaf/ManutencaoThymeleafController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/mottu/mottu/model/DTO/ManutencaoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/mottu/mottu/model/DTO/ManutencaoDTO.class" afterDir="false" />
-    </list>
+    <list default="true" id="b7960d7e-ab0a-4caa-901e-9b06823b1b98" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -12,21 +12,27 @@ public class Moto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "A placa é obrigatória")
+    @Size(min = 7, max = 8, message = "A placa deve ter entre 7 e 8 caracteres")
     private String placa;
 
     @Enumerated(EnumType.STRING)
-    private ModeloMoto modelo = ModeloMoto.MOTTU_POP;
+    @NotNull(message = "O modelo é obrigatório")
+    private ModeloMoto modelo;
 
     @Enumerated(EnumType.STRING)
-    private AnoMoto ano = AnoMoto.ANO_2016;
+    @NotNull(message = "O ano é obrigatório")
+    private AnoMoto ano;
 
     @Enumerated(EnumType.STRING)
-    private StatusMoto status = StatusMoto.DISPONIVEL;
+    @NotNull(message = "O status é obrigatório")
+    private StatusMoto status;
 
     private LocalDateTime dataSaida;
 
     private LocalDateTime dataRetorno;
 
+    @NotNull(message = "Informe se está em manutenção")
     private boolean emManutencao;
 
     @ManyToOne(fetch = FetchType.EAGER)
