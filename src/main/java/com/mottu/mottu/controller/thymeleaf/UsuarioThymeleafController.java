@@ -5,6 +5,7 @@ import com.mottu.mottu.model.Role;
 import com.mottu.mottu.model.Usuario;
 import com.mottu.mottu.repository.RoleRepository;
 import com.mottu.mottu.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,19 +26,19 @@ public class UsuarioThymeleafController {
         return "home";
     }
 
-    @GetMapping("/login") // http://localhost:8080/login
+    @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("showLoginModal", true);
         return "home";
     }
 
-    @GetMapping("/cadastro") // http://localhost:8080/cadastro
+    @GetMapping("/cadastro")
     public String cadastroPage(Model model) {
         model.addAttribute("showCadastroModal", true);
         return "home";
     }
 
-    @PostMapping("/save") // cadastro
+    @PostMapping("/save")
     public String cadastrarUsuario(UsuarioDTO userDTO, Model model) {
         try {
             if (usuarioRepository.existsByEmail(userDTO.getEmail())) {
@@ -67,8 +68,8 @@ public class UsuarioThymeleafController {
         }
     }
 
-    @PostMapping("/login") // login
-    public String login(UsuarioDTO userDTO, Model model) {
+    @PostMapping("/login")
+    public String login(UsuarioDTO userDTO, HttpSession session, Model model) {
         Usuario usuario = usuarioRepository.findByEmail(userDTO.getEmail());
         if (usuario == null || !usuario.getPassword().equals(userDTO.getPassword())) {
             model.addAttribute("errorMessage", "Usuário ou senha inválidos");
@@ -76,7 +77,10 @@ public class UsuarioThymeleafController {
             return "home";
         }
 
-        model.addAttribute("usuario", usuario);
-        return "dashboard"; // dashboard após login
+        session.setAttribute("usuarioLogado", usuario);
+        model.addAttribute("roleUsuario", usuario.getRole().getNome().name());
+        model.addAttribute("usuario", usuario.getUsername());
+
+        return "dashboard";
     }
 }

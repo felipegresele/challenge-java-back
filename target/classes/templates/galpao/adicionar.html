@@ -4,32 +4,12 @@
     <meta charset="UTF-8">
     <title>Adicionar Galpão</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-        }
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; }
         h2 { color: #00ff7f; }
         form { margin-top: 20px; max-width: 400px; }
         label { display: block; margin: 10px 0 5px; }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: none;
-        }
-        button {
-            margin-top: 15px;
-            padding: 8px 16px;
-            background: #00ff7f;
-            color: #000;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        input[type="text"], input[type="number"] { width: 100%; padding: 8px; border-radius: 5px; border: none; }
+        button { margin-top: 15px; padding: 8px 16px; background: #00ff7f; color: #000; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
         button:hover { background: #00cc66; }
         button:disabled { background: #555; cursor: not-allowed; }
         .mensagem-erro { color: #ff5555; margin-bottom: 10px; font-weight: bold; }
@@ -44,17 +24,20 @@
     <p th:text="${mensagemErro}"></p>
 </div>
 
-<form th:action="@{/galpoes-view/adicionar}" method="post">
+<form th:action="@{/galpoes-view/adicionar}" th:object="${galpaoDTO}" method="post">
     <label>Nome:</label>
-    <input type="text" name="nome" required th:disabled="${mensagemErro != null}">
+    <input type="text" th:field="*{nome}" required>
+    <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="mensagem-erro"></p>
 
     <label>Endereço:</label>
-    <input type="text" name="endereco" required th:disabled="${mensagemErro != null}">
+    <input type="text" th:field="*{endereco}" required>
+    <p th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}" class="mensagem-erro"></p>
 
     <label>Capacidade:</label>
-    <input type="number" name="capacidade" required th:disabled="${mensagemErro != null}">
+    <input type="number" th:field="*{capacidade}" min="1"  required>
+    <p th:if="${#fields.hasErrors('capacidade')}" th:errors="*{capacidade}" class="mensagem-erro"></p>
 
-    <button type="submit" th:disabled="${mensagemErro != null}">Salvar</button>
+    <button type="submit">Salvar</button>
 </form>
 
 <a th:href="@{/galpoes-view/todos}">Voltar para a lista</a>

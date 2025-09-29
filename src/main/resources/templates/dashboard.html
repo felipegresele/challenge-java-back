@@ -26,37 +26,36 @@
 </head>
 <body>
 
-<!-- inclui o header (fragment) -->
 <th:block th:replace="fragments/header :: header"></th:block>
 
-<!-- conteúdo da página -->
 <main class="container">
+
     <div class="menu-item">
         <h3>Galpão</h3>
         <a th:href="@{/galpoes-view/todos}">Ver Todos</a>
-        <a th:if="${usuario.role != null and usuario.role.nome.name() == 'ADMIN'}" th:href="@{/galpoes-view/adicionar}">Adicionar</a>
+        <a th:if="${roleUsuario == 'ADMIN'}" th:href="@{/galpoes-view/adicionar}">Adicionar</a>
     </div>
 
     <div class="menu-item">
         <h3>Manutenção</h3>
         <a th:href="@{/manutencoes-view/todos}">Ver Todos</a>
-        <a th:if="${usuario.role != null and usuario.role.nome.name() == 'ADMIN'}" th:href="@{/manutencoes-view/adicionar}">Adicionar</a>
+        <a th:if="${roleUsuario == 'ADMIN'}" th:href="@{/manutencoes-view/adicionar}">Adicionar</a>
     </div>
 
     <div class="menu-item">
         <h3>Moto</h3>
         <a th:href="@{/motos-view/todos}">Ver Todas</a>
-        <a th:if="${usuario.role != null and usuario.role.nome.name() == 'ADMIN'}" th:href="@{/motos-view/adicionar}">Adicionar</a>
+        <a th:if="${roleUsuario == 'ADMIN'}" th:href="@{/motos-view/adicionar}">Adicionar</a>
     </div>
 
     <div class="menu-item">
         <h3>Motoqueiro</h3>
         <a th:href="@{/motoqueiros-view/todos}">Ver Todos</a>
-        <a th:if="${usuario.role != null and usuario.role.nome.name() == 'ADMIN'}" th:href="@{/motoqueiros-view/adicionar}">Adicionar</a>
+        <a th:if="${roleUsuario == 'ADMIN'}" th:href="@{/motoqueiros-view/adicionar}">Adicionar</a>
     </div>
+
 </main>
 
-<!-- inclui o footer (fragment) -->
 <th:block th:replace="fragments/footer :: footer"></th:block>
 
 </body>

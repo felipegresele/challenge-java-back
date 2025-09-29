@@ -1,9 +1,20 @@
 package com.mottu.mottu.model.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class MotoqueiroDTO {
 
+    @NotBlank(message = "O nome completo é obrigatório")
     private String nomeCompleto;
+
+    @NotBlank(message = "O CPF é obrigatório")
+    @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 números")
     private String cpf;
+
+    @NotBlank(message = "O telefone é obrigatório")
+    @Size(min = 10, max = 15, message = "Telefone inválido")
     private String telefone;
     private boolean ativo;
 

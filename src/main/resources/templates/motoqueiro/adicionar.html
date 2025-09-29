@@ -26,19 +26,22 @@
 <div th:if="${mensagemErro}" class="mensagem mensagem-erro" th:text="${mensagemErro}"></div>
 <div th:if="${mensagemSucesso}" class="mensagem mensagem-sucesso" th:text="${mensagemSucesso}"></div>
 
-<form th:action="@{/motoqueiros-view/adicionar}" method="post">
+<form th:action="@{/motoqueiros-view/adicionar}" th:object="${motoqueiroDTO}" method="post">
     <label>Nome Completo:</label>
-    <input type="text" name="nomeCompleto" required>
+    <input type="text" th:field="*{nomeCompleto}" required>
+    <div th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}" class="mensagem-erro"></div>
 
     <label>CPF:</label>
-    <input type="text" name="cpf" maxlength="11" pattern="\d{11}" title="Digite somente números" required>
+    <input type="text" th:field="*{cpf}" maxlength="11" minlength="11" required pattern="\d{11}" title="Digite apenas números (11 dígitos)">
+    <div th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="mensagem-erro"></div>
 
     <label>Telefone:</label>
-    <input type="text" name="telefone" required>
+    <input type="text" th:field="*{telefone}" maxlength="13" minlength="13" required pattern="\d{13}" title="Digite apenas números (13 dígitos)">
+    <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="mensagem-erro"></div>
 
     <div class="ativo-content">
         <label>Ativo:</label>
-        <input type="checkbox" name="ativo" class="ativo-checkbox">
+        <input type="checkbox" th:field="*{ativo}" class="ativo-checkbox">
     </div>
 
     <button type="submit">Salvar</button>

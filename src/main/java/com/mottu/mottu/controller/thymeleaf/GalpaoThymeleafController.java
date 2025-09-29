@@ -7,6 +7,7 @@ import com.mottu.mottu.model.Usuario;
 import com.mottu.mottu.repository.GalpaoRepository;
 import com.mottu.mottu.service.GalpaoMapper;
 import com.mottu.mottu.service.GalpaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,7 +58,7 @@ public class GalpaoThymeleafController {
     // ADICIONAR GALPÃO
     @PostMapping("/adicionar")
     public String adicionarGalpao(@SessionAttribute("usuarioLogado") Usuario usuario,
-                                  GalpaoDTO dto,
+                                  @Valid GalpaoDTO dto,
                                   Model model) {
 
         if (!checarPermissaoAdmin(usuario, model)) {

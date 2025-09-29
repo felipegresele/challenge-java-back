@@ -6,7 +6,8 @@ import com.mottu.mottu.model.RoleName;
 import com.mottu.mottu.model.Usuario;
 import com.mottu.mottu.service.MotoqueiroMapper;
 import com.mottu.mottu.service.MotoqueiroService;
-import org.springframework.beans.BeanUtils;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,18 +46,21 @@ public class MotoqueiroThymeleafController {
 
     // FORMULÁRIO ADICIONAR
     @GetMapping("/adicionar")
-    public String mostrarFormularioAdicionar(Model model,
-                                             @SessionAttribute("usuarioLogado") Usuario usuario) {
+    public String mostrarFormularioAdicionar(Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
         model.addAttribute("motoqueiroDTO", new MotoqueiroDTO());
-        checarPermissaoAdmin(usuario, model); // Apenas adiciona mensagem de erro se não for admin
+        checarPermissaoAdmin(usuario, model);
         return "motoqueiro/adicionar";
     }
 
     // ADICIONAR MOTOQUEIRO
     @PostMapping("/adicionar")
-    public String adicionarMotoqueiro(@SessionAttribute("usuarioLogado") Usuario usuario,
-                                      MotoqueiroDTO dto,
-                                      Model model) {
+    public String adicionarMotoqueiro(@Valid MotoqueiroDTO dto, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
         if (!checarPermissaoAdmin(usuario, model)) {
             model.addAttribute("motoqueiroDTO", dto);
             return "motoqueiro/adicionar";
@@ -68,15 +72,17 @@ public class MotoqueiroThymeleafController {
 
     // FORMULÁRIO EDITAR
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id,
-                                          Model model,
-                                          @SessionAttribute("usuarioLogado") Usuario usuario) {
-        Motoqueiro motoqueiro = motoqueiroService.buscarPorId(id).orElse(null);
-        if (motoqueiro == null) {
+    public String mostrarFormularioEditar(@PathVariable Long id, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
+        Optional<Motoqueiro> optionalMotoqueiro = motoqueiroService.buscarPorId(id);
+        if (optionalMotoqueiro.isEmpty()) {
             model.addAttribute("mensagemErro", "Motoqueiro não encontrado.");
             return "motoqueiro/listar";
         }
 
+        Motoqueiro motoqueiro = optionalMotoqueiro.get();
         model.addAttribute("motoqueiroDTO", MotoqueiroMapper.toDTO(motoqueiro));
         model.addAttribute("motoqueiroId", id);
         checarPermissaoAdmin(usuario, model);
@@ -86,10 +92,10 @@ public class MotoqueiroThymeleafController {
 
     // EDITAR MOTOQUEIRO
     @PostMapping("/editar/{id}")
-    public String editarMotoqueiro(@PathVariable Long id,
-                                   @SessionAttribute("usuarioLogado") Usuario usuario,
-                                   MotoqueiroDTO dto,
-                                   Model model) {
+    public String editarMotoqueiro(@PathVariable Long id, @Valid MotoqueiroDTO dto, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
         if (!checarPermissaoAdmin(usuario, model)) {
             model.addAttribute("motoqueiroDTO", dto);
             model.addAttribute("motoqueiroId", id);
@@ -102,9 +108,10 @@ public class MotoqueiroThymeleafController {
 
     // FORMULÁRIO EXCLUIR
     @GetMapping("/excluir/{id}")
-    public String mostrarFormularioExcluir(@PathVariable Long id,
-                                           Model model,
-                                           @SessionAttribute("usuarioLogado") Usuario usuario) {
+    public String mostrarFormularioExcluir(@PathVariable Long id, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
         Motoqueiro motoqueiro = motoqueiroService.buscarPorId(id).orElse(null);
         if (motoqueiro == null) {
             model.addAttribute("mensagemErro", "Motoqueiro não encontrado.");
@@ -112,16 +119,17 @@ public class MotoqueiroThymeleafController {
         }
 
         model.addAttribute("motoqueiro", motoqueiro);
-        checarPermissaoAdmin(usuario, model); // Mensagem de erro se não for admin
+        checarPermissaoAdmin(usuario, model);
 
         return "motoqueiro/excluir";
     }
 
     // EXCLUIR MOTOQUEIRO
     @PostMapping("/excluir/{id}")
-    public String excluirMotoqueiro(@PathVariable Long id,
-                                    @SessionAttribute("usuarioLogado") Usuario usuario,
-                                    Model model) {
+    public String excluirMotoqueiro(@PathVariable Long id, Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
         if (!checarPermissaoAdmin(usuario, model)) {
             motoqueiroService.buscarPorId(id).ifPresent(m -> model.addAttribute("motoqueiro", m));
             return "motoqueiro/excluir";

@@ -3,6 +3,7 @@ package com.mottu.mottu.controller;
 import com.mottu.mottu.model.DTO.MotoqueiroDTO;
 import com.mottu.mottu.model.Motoqueiro;
 import com.mottu.mottu.service.MotoqueiroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ public class MotoqueiroRestController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Motoqueiro> cadastrarMotoqueiro(@RequestBody MotoqueiroDTO dto) {
+    public ResponseEntity<Motoqueiro> cadastrarMotoqueiro(@Valid @RequestBody MotoqueiroDTO dto) {
         Motoqueiro motoqueiro = motoqueiroService.criarMotoqueiro(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(motoqueiro);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody MotoqueiroDTO dto) {
+    public ResponseEntity<?> update(@Valid @PathVariable Long id, @RequestBody MotoqueiroDTO dto) {
         return motoqueiroService.atualizarMotoqueiro(id, dto)
                 .<ResponseEntity<?>>map(m -> ResponseEntity.ok(m))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)

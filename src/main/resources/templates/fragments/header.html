@@ -40,7 +40,7 @@
 
         <div class="user-info">
             <!-- mostra o nome que você coloca no model: model.addAttribute("usuario", usuario) -->
-            <span>Olá, <strong th:text="${usuario.username}">Usuário</strong>!</span>
+            <span>Olá, <strong th:text="${usuario}">Usuário</strong>!</span>
 
             <!-- botão de logout (POST é o padrão quando usar Spring Security) -->
             <form th:action="@{/logout}" method="post" style="margin:0;">
