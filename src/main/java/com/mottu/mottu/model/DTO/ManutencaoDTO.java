@@ -1,17 +1,25 @@
 package com.mottu.mottu.model.DTO;
 
 import com.mottu.mottu.model.PrioridadeManutencao;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
 public class ManutencaoDTO {
 
     private Long id;
 
+    @NotBlank(message = "Descrição é obrigatória")
+    @Size(max = 255, message = "Descrição muito longa")
     private String descricao;
 
+    @NotNull(message = "Prioridade é obrigatória")
     private PrioridadeManutencao prioridadeManutencao = PrioridadeManutencao.MEDIA;
 
+    @NotNull(message = "Data de abertura é obrigatória")
     @PastOrPresent(message = "Data de abertura não pode ser futura")
     private LocalDateTime dataAbertura;
 
@@ -19,6 +27,8 @@ public class ManutencaoDTO {
 
     private boolean emAndamento;
 
+    @NotBlank(message = "Placa da moto é obrigatória")
+    @Size(min = 7, max = 7, message = "Placa deve ter 7 caracteres")
     private String placaMoto;
 
     public Long getId() { return id; }

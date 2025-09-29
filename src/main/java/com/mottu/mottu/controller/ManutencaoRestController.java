@@ -3,6 +3,7 @@ package com.mottu.mottu.controller;
 import com.mottu.mottu.model.DTO.ManutencaoDTO;
 import com.mottu.mottu.model.Manutencao;
 import com.mottu.mottu.service.ManutencaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ManutencaoRestController {
 
     // Salvar nova manutenção
     @PostMapping("/save")
-    public ResponseEntity<?> salvar(@RequestBody ManutencaoDTO dto) {
+    public ResponseEntity<?> salvar(@Valid @RequestBody ManutencaoDTO dto) {
         try {
             Manutencao manutencao = manutencaoService.salvar(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(manutencao);
@@ -39,7 +40,7 @@ public class ManutencaoRestController {
 
     // Atualizar manutenção
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody ManutencaoDTO dto) {
+    public ResponseEntity<Object> atualizar(@Valid @PathVariable Long id, @RequestBody ManutencaoDTO dto) {
         Optional<Manutencao> manutencaoOpt = manutencaoService.atualizar(id, dto);
         if (manutencaoOpt.isPresent()) {
             return ResponseEntity.ok(manutencaoOpt.get());

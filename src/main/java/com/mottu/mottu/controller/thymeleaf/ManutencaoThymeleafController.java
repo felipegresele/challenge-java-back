@@ -5,10 +5,12 @@ import com.mottu.mottu.model.Manutencao;
 import com.mottu.mottu.model.RoleName;
 import com.mottu.mottu.model.Usuario;
 import com.mottu.mottu.service.ManutencaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -50,9 +52,15 @@ public class ManutencaoThymeleafController {
 
     @PostMapping("/adicionar")
     public String adicionarManutencao(@SessionAttribute("usuarioLogado") Usuario usuario,
-                                      ManutencaoDTO dto,
+                                      @Valid ManutencaoDTO dto,
+                                      BindingResult bindingResult,
                                       Model model) {
+
         if (!checarPermissaoAdmin(usuario, model)) {
+            return "manutencao/adicionar";
+        }
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("manutencaoDTO", dto);
             return "manutencao/adicionar";
         }
@@ -92,11 +100,17 @@ public class ManutencaoThymeleafController {
 
     @PostMapping("/editar/{id}")
     public String editarManutencao(@PathVariable Long id,
-                                   ManutencaoDTO dto,
+                                   @Valid ManutencaoDTO dto,
+                                   BindingResult bindingResult,
                                    Model model,
                                    @SessionAttribute("usuarioLogado") Usuario usuario) {
+
         if (!usuario.getRole().getNome().equals(RoleName.ADMIN)) {
             model.addAttribute("mensagemErro", "Você não tem permissão para editar manutenções.");
+            return "manutencao/editar";
+        }
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("manutencaoDTO", dto);
             return "manutencao/editar";
         }

@@ -3,6 +3,7 @@ package com.mottu.mottu.controller;
 import com.mottu.mottu.model.DTO.MotoDTO;
 import com.mottu.mottu.model.Moto;
 import com.mottu.mottu.service.MotoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class MotoRestController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> salvar(@RequestBody MotoDTO dto) {
+    public ResponseEntity<?> salvar(@Valid @RequestBody MotoDTO dto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(motoService.salvar(dto));
         } catch (Exception e) {
@@ -35,7 +36,7 @@ public class MotoRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody MotoDTO dto) {
+    public ResponseEntity<?> editar(@Valid @PathVariable Long id, @RequestBody MotoDTO dto) {
         try {
             return ResponseEntity.ok(motoService.editar(id, dto));
         } catch (Exception e) {
