@@ -1,36 +1,87 @@
-🛠️ Mottu - API REST em Java
-Este é o back-end da aplicação Mottu, desenvolvido em Java. Ele fornece uma API RESTful para operações como cadastro de usuários, cadastro de motos e listagem de motos, conectando-se diretamente com o front-end da aplicação via requisições HTTP.
+README – Projeto Java Challenge Mottu (Entrega 3)
+1. Visão Geral
 
-Video de apresentação do projeto: https://www.youtube.com/watch?v=HGVIq_CFf2M
+Este projeto é uma aplicação Java com Spring Boot desenvolvida como entrega do Challenge Mottu – Entrega 3. A aplicação gerencia registros de Manutenção, Motos, Galpões e Motoqueiros, permitindo diferentes operações de acordo com o tipo de usuário.
 
-📚 Funcionalidades
-✅ Cadastro de usuários
+Banco de Dados: PostgreSQL
 
-✅ Cadastro de motos
+Versionamento do Banco: Flyway (com população automática de dados iniciais)
 
-✅ Listagem de motos cadastradas
+Execução do projeto: mvn spring-boot:run
 
-✅ Integração com front-end React via API REST
+Portas:
 
-🔄 Integração com o Front-End
-A aplicação se comunica com o front-end (desenvolvido em React) através de requisições HTTP. O front consome os endpoints da API, permitindo que o usuário interaja com o sistema de forma intuitiva via interface gráfica.
+Backend (API): 380
 
-O front faz POST para /api/usuario/save ao cadastrar um novo usuário.
+Frontend (Web): 8080/home
 
-Faz POST para /api/moto/save ao cadastrar uma moto.
+2. Endpoints
+2.1 Manutenção
+Método	Endpoint	Descrição	Permissão
+GET	/manutencoes/listar	Lista todas as manutenções	Admin e Operador
+POST	/manutencoes/save	Adiciona uma nova manutenção	Admin
+PUT	/manutencoes/{id}	Edita manutenção pelo ID	Admin
+DELETE	/manutencoes/{id}	Exclui manutenção pelo ID	Admin
+2.2 Motos
+Método	Endpoint	Descrição	Permissão
+GET	/motos/listar	Lista todas as motos	Admin e Operador
+POST	/motos/save	Adiciona uma nova moto	Admin
+PUT	/motos/{id}	Edita moto pelo ID	Admin
+DELETE	/motos/{id}	Exclui moto pelo ID	Admin
+2.3 Galpões
+Método	Endpoint	Descrição	Permissão
+GET	/galpoes/listar	Lista todos os galpões	Admin e Operador
+POST	/galpoes/save	Adiciona um novo galpão	Admin
+PUT	/galpoes/{id}	Edita galpão pelo ID	Admin
+DELETE	/galpoes/{id}	Exclui galpão pelo ID	Admin
+2.4 Motoqueiros
+Método	Endpoint	Descrição	Permissão
+GET	/motoqueiros/listar	Lista todos os motoqueiros	Admin e Operador
+POST	/motoqueiros/save	Adiciona um novo motoqueiro	Admin
+PUT	/motoqueiros/{id}	Edita motoqueiro pelo ID	Admin
+DELETE	/motoqueiros/{id}	Exclui motoqueiro pelo ID	Admin
+3. Regras de Permissão
 
-Faz GET para /api/moto/ git para exibir a lista de motos.
+Admin: Pode listar, adicionar, editar e excluir todos os registros.
 
-Certifique-se de que o servidor Java esteja rodando na mesma porta esperada pelo front (http://localhost:8080) ou configure o CORS caso necessário.
+Operador: Pode apenas listar registros. Tentativas de adicionar, editar ou excluir resultam em mensagem de erro de permissão na aplicação web.
 
-🔧 Tecnologias Utilizadas
-Java 17+
+4. Fluxo da Aplicação Web
 
-Spring Boot ou Servlets (dependendo da versão)
+Usuário acessa: http://localhost:8080/home
 
-JPA / Hibernate ou JDBC
+Tela inicial: Login / Cadastro
 
-MySQL
+Após login bem-sucedido:
 
-Maven
+Redirecionamento para Dashboard
 
+Dashboard exibe todos os grupos (Motos, Galpões, Motoqueiros, Manutenção)
+
+Usuário vê os dados conforme sua permissão
+
+Interações:
+
+Admin: pode clicar em Adicionar / Editar / Excluir
+
+Operador: apenas visualiza, sem ação nos botões CRUD
+
+5. Banco de Dados
+
+Tipo: PostgreSQL
+
+Versionamento e População Inicial: Flyway
+
+Funcionalidade:
+
+Cria tabelas automaticamente
+
+Popula dados padrão para testes iniciais
+
+6. Comando para Rodar a Aplicação
+mvn spring-boot:run
+
+7. Vídeo de Apresentação
+
+Vídeo demonstrativo do projeto:
+https://www.youtube.com/watch?v=HGVIq_CFf2M
