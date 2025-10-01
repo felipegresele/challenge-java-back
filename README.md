@@ -81,6 +81,7 @@ A aplicação gerencia registros de **Manutenção, Motos, Galpões e Motoqueiro
 ## 6. Comando para Rodar a Aplicação
 ```bash
 mvn spring-boot:run
+---
 
 ## 7. Vídeo de Apresentação
 
