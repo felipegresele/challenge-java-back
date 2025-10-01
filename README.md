@@ -1,6 +1,8 @@
 🛠️ Mottu - API REST em Java
 Este é o back-end da aplicação Mottu, desenvolvido em Java. Ele fornece uma API RESTful para operações como cadastro de usuários, cadastro de motos e listagem de motos, conectando-se diretamente com o front-end da aplicação via requisições HTTP.
 
+Video de apresentação do projeto: https://www.youtube.com/watch?v=HGVIq_CFf2M
+
 📚 Funcionalidades
 ✅ Cadastro de usuários
 
