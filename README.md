@@ -1,7 +1,8 @@
 README – Projeto Java Challenge Mottu (Entrega 3)
 1. Visão Geral
 
-Este projeto é uma aplicação Java com Spring Boot desenvolvida como entrega do Challenge Mottu – Entrega 3. A aplicação gerencia registros de Manutenção, Motos, Galpões e Motoqueiros, permitindo diferentes operações de acordo com o tipo de usuário.
+Este projeto é uma aplicação Java com Spring Boot desenvolvida como entrega do Challenge Mottu – Entrega 3.
+A aplicação gerencia registros de Manutenção, Motos, Galpões e Motoqueiros, permitindo diferentes operações de acordo com o tipo de usuário.
 
 Banco de Dados: PostgreSQL
 
@@ -11,7 +12,7 @@ Execução do projeto: mvn spring-boot:run
 
 Portas:
 
-Backend (API): 380
+Backend (API): 8080
 
 Frontend (Web): 8080/home
 
@@ -54,7 +55,7 @@ Tela inicial: Login / Cadastro
 
 Após login bem-sucedido:
 
-Redirecionamento para Dashboard
+Redirecionamento para o Dashboard
 
 Dashboard exibe todos os grupos (Motos, Galpões, Motoqueiros, Manutenção)
 
